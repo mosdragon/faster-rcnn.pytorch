@@ -1,7 +1,7 @@
 
 
 # Easy small set of SUMO cateogories.
-sumo_small = {
+sumo_small = list({
     "chair",
     "armchair",
     "sofa",
@@ -10,10 +10,10 @@ sumo_small = {
     "double_bed",
     "single_bed",
     "bathtub",
-}
+})
 
 # Full set of categories used by SUMO.
-sumo_full = [
+sumo_full = list([
     'air_conditioner',
     'arch',
     'armchair',
@@ -150,4 +150,4 @@ sumo_full = [
     'window',
     'workplace',
     'xbox',
-]
+])
