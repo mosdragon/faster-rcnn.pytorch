@@ -26,9 +26,13 @@ from . import ds_utils
 from model.utils.config import cfg
 from .voc_eval import voc_eval
 
-
-
 from datasets.sumo import sumo_small, sumo_full
+
+# Python 3 support:
+try:
+    xrange          # Python 2
+except NameError:
+    xrange = range  # Python 3
 
 class pascal_voc(imdb):
     def __init__(self, image_set, year, devkit_path=None):
