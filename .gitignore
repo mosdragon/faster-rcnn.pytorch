@@ -200,4 +200,7 @@ caffe2.egg-info
 
 # cython generated files
 lib/model/utils/bbox.c
-lib/pycocotools/_mask.c
+lib/pycocotools/_mask.csumo_sample/input_images
+sumo_sample/output_images
+sumo_sample/input_images
+sumo_sample/annotations.pkl
