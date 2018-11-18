@@ -29,7 +29,6 @@ train:
 		--cuda --mGPUs
 
 
-
 test: info_test
 	echo "Testing"
 	time python test_net.py \

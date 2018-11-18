@@ -23,7 +23,9 @@ import pickle
 from .imdb import imdb
 from .imdb import ROOT_DIR
 from . import ds_utils
+from model.utils.config import cfg
 from .voc_eval import voc_eval
+
 
 
 from datasets.sumo import sumo_small, sumo_full
