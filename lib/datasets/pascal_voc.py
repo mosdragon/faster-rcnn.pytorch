@@ -25,17 +25,8 @@ from .imdb import ROOT_DIR
 from . import ds_utils
 from .voc_eval import voc_eval
 
-# TODO: make fast_rcnn irrelevant
-# >>>> obsolete, because it depends on sth outside of this project
-from model.utils.config import cfg
 
-try:
-    xrange          # Python 2
-except NameError:
-    xrange = range  # Python 3
-
-# <<<< obsolete
-
+from datasets.sumo import sumo_small, sumo_full
 
 class pascal_voc(imdb):
     def __init__(self, image_set, year, devkit_path=None):
@@ -45,6 +36,8 @@ class pascal_voc(imdb):
         self._devkit_path = self._get_default_path() if devkit_path is None \
             else devkit_path
         self._data_path = os.path.join(self._devkit_path, 'VOC' + self._year)
+
+        # PASCAL Dataset Classes.
         # self._classes = ('__background__',  # always index 0
         #                  'aeroplane', 'bicycle', 'bird', 'boat',
         #                  'bottle', 'bus', 'car', 'cat', 'chair',
@@ -52,16 +45,9 @@ class pascal_voc(imdb):
         #                  'motorbike', 'person', 'pottedplant',
         #                  'sheep', 'sofa', 'train', 'tvmonitor')
 
-        self._classes = ('__background__',  # always index 0
-                            "chair",
-                            "armchair",
-                            "sofa",
-                            "coffee_table",
-                            "desk",
-                            "double_bed",
-                            "single_bed",
-                            "bathtub"
-                        )
+        # Use full SUMO dataset classes. Keep "__background__" at index 0.
+        self._classes = tuple(["__background__"] + sumo_full)
+
         self._class_to_ind = dict(zip(self.classes, xrange(self.num_classes)))
         self._image_ext = '.jpg'
         self._image_index = self._load_image_set_index()

@@ -24,6 +24,8 @@ from model.utils.config import cfg
 import pdb
 
 
+from datasets.sumo import sumo_small, sumo_full
+
 class pascal_voc(imdb):
   def __init__(self, image_set, year, devkit_path=None):
     imdb.__init__(self, 'voc_' + year + '_' + image_set)
@@ -34,6 +36,8 @@ class pascal_voc(imdb):
 
 
     self._data_path = os.path.join(self._devkit_path, 'VOC' + self._year)
+
+    # PASCAL Dataset Classes.
     # self._classes = ('__background__',  # always index 0
     #                  'aeroplane', 'bicycle', 'bird', 'boat',
     #                  'bottle', 'bus', 'car', 'cat', 'chair',
@@ -41,16 +45,8 @@ class pascal_voc(imdb):
     #                  'motorbike', 'person', 'pottedplant',
     #                  'sheep', 'sofa', 'train', 'tvmonitor')
 
-    self._classes = ('__background__',  # always index 0
-                            "chair",
-                            "armchair",
-                            "sofa",
-                            "coffee_table",
-                            "desk",
-                            "double_bed",
-                            "single_bed",
-                            "bathtub"
-                    )
+    # Use full SUMO dataset classes. Keep "__background__" at index 0.
+    self._classes = tuple(["__background__"] + sumo_full)
 
     self._class_to_ind = dict(list(zip(self.classes, list(range(self.num_classes)))))
     self._image_ext = '.jpg'
