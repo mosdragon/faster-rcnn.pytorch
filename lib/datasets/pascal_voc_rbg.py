@@ -23,6 +23,9 @@ from .voc_eval import voc_eval
 from model.utils.config import cfg
 import pdb
 
+# Import sumo categories
+from datasets.sumo import sumo_full
+
 
 class pascal_voc(imdb):
   def __init__(self, image_set, year, devkit_path=None):
@@ -32,14 +35,19 @@ class pascal_voc(imdb):
     self._devkit_path = self._get_default_path() if devkit_path is None \
       else devkit_path
 
-    
+
     self._data_path = os.path.join(self._devkit_path, 'VOC' + self._year)
-    self._classes = ('__background__',  # always index 0
-                     'aeroplane', 'bicycle', 'bird', 'boat',
-                     'bottle', 'bus', 'car', 'cat', 'chair',
-                     'cow', 'diningtable', 'dog', 'horse',
-                     'motorbike', 'person', 'pottedplant',
-                     'sheep', 'sofa', 'train', 'tvmonitor')
+
+    # self._classes = ('__background__',  # always index 0
+    #                  'aeroplane', 'bicycle', 'bird', 'boat',
+    #                  'bottle', 'bus', 'car', 'cat', 'chair',
+    #                  'cow', 'diningtable', 'dog', 'horse',
+    #                  'motorbike', 'person', 'pottedplant',
+    #                  'sheep', 'sofa', 'train', 'tvmonitor')
+
+    self._classes = sumo_full
+
+
     self._class_to_ind = dict(list(zip(self.classes, list(range(self.num_classes)))))
     self._image_ext = '.jpg'
     self._image_index = self._load_image_set_index()
@@ -84,7 +92,7 @@ class pascal_voc(imdb):
     # self._devkit_path + /VOCdevkit2007/VOC2007/ImageSets/Main/val.txt
     image_set_file = os.path.join(self._data_path, 'ImageSets', 'Main',
                                   self._image_set + '.txt')
-    
+
     assert os.path.exists(image_set_file), \
       'Path does not exist: {}'.format(image_set_file)
     with open(image_set_file) as f:
@@ -168,10 +176,11 @@ class pascal_voc(imdb):
     for ix, obj in enumerate(objs):
       bbox = obj.find('bndbox')
       # Make pixel indexes 0-based
-      x1 = float(bbox.find('xmin').text) - 1
-      y1 = float(bbox.find('ymin').text) - 1
-      x2 = float(bbox.find('xmax').text) - 1
-      y2 = float(bbox.find('ymax').text) - 1
+      x1 = float(bbox.find('xmin').text)
+      y1 = float(bbox.find('ymin').text)
+      x2 = float(bbox.find('xmax').text)
+      y2 = float(bbox.find('ymax').text)
+
       cls = self._class_to_ind[obj.find('name').text.lower().strip()]
       boxes[ix, :] = [x1, y1, x2, y2]
       gt_classes[ix] = cls
