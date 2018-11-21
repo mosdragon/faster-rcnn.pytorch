@@ -1,4 +1,4 @@
-export DATASET="sumo"
+export DATASET="pascal_voc"
 
 all: prep
 
