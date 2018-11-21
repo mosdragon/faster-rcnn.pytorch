@@ -1,7 +1,8 @@
 
 
 # Easy small set of SUMO cateogories.
-sumo_small = list({
+sumo_small = tuple([
+    "__background__",
     "chair",
     "armchair",
     "sofa",
@@ -10,10 +11,11 @@ sumo_small = list({
     "double_bed",
     "single_bed",
     "bathtub",
-})
+])
 
 # Full set of categories used by SUMO.
-sumo_full = list([
+sumo_full = tuple([
+    "__background__",
     'air_conditioner',
     'arch',
     'armchair',

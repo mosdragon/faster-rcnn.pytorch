@@ -51,8 +51,8 @@ class pascal_voc(imdb):
         #                  'motorbike', 'person', 'pottedplant',
         #                  'sheep', 'sofa', 'train', 'tvmonitor')
 
-        # Use full SUMO dataset classes. Keep "__background__" at index 0.
-        self._classes = tuple(["__background__"] + sumo_full)
+        # Use full SUMO dataset classes. This has "__background__" at index 0.
+        self._classes = sumo_full
 
         self._class_to_ind = dict(zip(self.classes, xrange(self.num_classes)))
         self._image_ext = '.jpg'
