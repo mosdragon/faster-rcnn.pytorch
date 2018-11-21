@@ -22,11 +22,13 @@ info_test:
 
 train:
 	echo "Training"
-	time python trainval_net.py --dataset ${DATASET} \
+	time python trainval_net.py \
+		--dataset ${DATASET} \
 		--net vgg16 \
 		--bs ${BATCH_SIZE} --nw ${NW} \
 		--lr ${LR} --lr_decay_step ${LR_DECAY} \
-		--cuda --mGPUs
+		--epochs ${MAX_EPOCH} \
+		--cuda
 
 
 test: info_test
