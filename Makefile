@@ -37,5 +37,5 @@ test: info_test
 		--dataset ${DATASET} \
 		--net vgg16 \
 		--checkepoch ${EPOCH} \
-		--checkpoint 68973 \
+		--checkpoint ${CHECKPOINT} \
 		--cuda
