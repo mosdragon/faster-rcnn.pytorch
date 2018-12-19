@@ -58,6 +58,9 @@ time python trainval_net.py --dataset ${DATASET} \
 
 Once this is running, we can go back and generate the `test` partitions in the SUMO dataset. Those will be useful to us later.
 
+### After Training
+As each epoch finishes, we will find a trained model file under `models/pascal_voc/vgg16/faster_rcnn_${session}_${epoch}_${step}.pth`. This is a model we can then use to train.
+
 
 ### Using a Small Sample for Training
 Anytime we modify our training data, me must remove the cache this repo creates.
@@ -66,7 +69,7 @@ cd data/cache/
 # You will see something like pascal_voc2007_train.pkl. Delete that file.
 ```
 
-We can just create a new temporary `trainval.txt` file.
+We can just create new temporary `train.txt` and `trainval.txt` files.
 ```bash
 cd /path/to/dataset_sumo
 cd ImageSets/Main
