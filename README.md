@@ -37,6 +37,12 @@ pip install -r requirements.txt
 ## Training:
 __Note:__ Run this inside `tmux` or `screen`.
 
+
+## Use the Virtualenv
+```bash
+source frcnn_venv/bin/activate
+```
+
 ### Set ENV Vars
 ```bash
 export DATASET="pascal_voc"  # We symlinked sumo as pascal earlier.
