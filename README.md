@@ -1,7 +1,5 @@
 # A *Faster* Pytorch Implementation of Faster R-CNN
 
-## Using SUMO Dataset
-
 ### Download Repo:
 ```bash
 git clone https://github.com/mosdragon/faster-rcnn.pytorch
