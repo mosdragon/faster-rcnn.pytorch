@@ -21,7 +21,7 @@ wget https://filebox.ece.vt.edu/~jw2yang/faster-rcnn/pretrained-base-models/vgg1
 ### Setup faster-rcnn to work with SUMO
 ```bash
 cd data
-mkdir -p VOCdevkit2007/VOC2007
+mkdir VOCdevkit2007
 ln -s /path/to/dataset_sumo VOCdevkit2007/VOC2007
 ```
 
