@@ -57,3 +57,28 @@ time python trainval_net.py --dataset ${DATASET} \
 ```
 
 Once this is running, we can go back and generate the `test` partitions in the SUMO dataset. Those will be useful to us later.
+
+
+### Using a Small Sample for Training
+Anytime we modify our training data, me must remove the cache this repo creates.
+```bash
+cd data/cache/
+# You will see something like pascal_voc2007_train.pkl. Delete that file.
+```
+
+We can just create a new temporary `trainval.txt` file.
+```bash
+cd /path/to/dataset_sumo
+cd ImageSets/Main
+
+# Backup the full size train/trainval file.
+mkdir backup
+cp train.txt backup/
+cp trainval.txt backup/
+
+# Take first 100 samples from train/trainval files.
+head -n 100 backup/train.txt > train.txt
+head -n 100 backup/trainval.txt > trainval.txt
+```
+
+Now run the training steps above. Undo these steps and delete cache again when done experimenting with small sample size.
