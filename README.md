@@ -47,10 +47,14 @@ source frcnn_venv/bin/activate
 ```bash
 export DATASET="pascal_voc"  # We symlinked sumo as pascal earlier.
 export BATCH_SIZE=4
-export NW=4  # Set this to number of GPUs. 4 works best overall
+export NW=4  # Set this to number of GPUs. 4 works well for Skynet.
 export LR="1e-3"
 export LR_DECAY="5"
+export MAX_EPOCHS="9"  # This should take 48 hours.
 ```
+
+We get a model built that we can run anytime after each epoch (about 5 hours each). We can set `$MAX_EPOCH` to something large above, and use model from Epoch `5` or something and let the network continue training behind the scenes unless we have no more GPUs to use for inference.
+
 
 ### Begin Training
 ```bash
@@ -59,6 +63,7 @@ time python trainval_net.py --dataset ${DATASET} \
   --net vgg16 \
   --bs ${BATCH_SIZE} --nw ${NW} \
   --lr ${LR} --lr_decay_step ${LR_DECAY} \
+  --epochs ${MAX_EPOCHS}
   --cuda
 ```
 
