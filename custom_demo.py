@@ -386,7 +386,7 @@ if __name__ == '__main__':
       misc_toc = time.time()
       nms_time = misc_toc - misc_tic
 
-      det_file = os.path.join(args.image_dir, "detections.pkl")
+      det_file = "detections.pkl"
       with open(det_file, 'wb') as f:
         pickle.dump(all_boxes, f, pickle.HIGHEST_PROTOCOL)
 
