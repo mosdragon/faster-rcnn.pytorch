@@ -273,11 +273,13 @@ class pascal_voc(imdb):
         return path
 
     def _write_voc_results_file(self, all_boxes):
+        print("Doing _write_voc_results_file()")
         for cls_ind, cls in enumerate(self.classes):
             if cls == '__background__':
                 continue
             print('Writing {} VOC results file'.format(cls))
             filename = self._get_voc_results_file_template().format(cls)
+            print("FILENAME: ", filename)
             with open(filename, 'wt') as f:
                 for im_ind, index in enumerate(self.image_index):
                     dets = all_boxes[cls_ind][im_ind]
