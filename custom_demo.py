@@ -244,41 +244,41 @@ if __name__ == '__main__':
   vis = True
 
   webcam_num = args.webcam_num
-  # Set up webcam or get image directories
-  if webcam_num >= 0 :
-    cap = cv2.VideoCapture(webcam_num)
-    num_images = 0
-  else:
-    imglist = os.listdir(args.image_dir)
-    num_images = len(imglist)
+  # Get image directories
+  imglist = os.listdir(args.image_dir)
+  num_images = len(imglist)
 
   print('Loaded Photo: {} images.'.format(num_images))
 
+  # Store detections using this
+  all_boxes = [[[] for _ in xrange(num_images)]
+               for _ in xrange(imdb.num_classes)]
 
+  empty_array = np.transpose(np.array([[],[],[],[],[]]), (1,0))
+
+  # Counter variable
+  i = -1
   while (num_images >= 0):
       total_tic = time.time()
-      if webcam_num == -1:
-        num_images -= 1
 
-      # Get image from the webcam
-      if webcam_num >= 0:
-        if not cap.isOpened():
-          raise RuntimeError("Webcam could not open. Please check connection.")
-        ret, frame = cap.read()
-        im_in = np.array(frame)
+      num_images -= 1
+      i += 1  # Increment counter
+
       # Load the demo image
-      else:
-        im_file = os.path.join(args.image_dir, imglist[num_images])
-        # im = cv2.imread(im_file)
-        im_in = np.array(imread(im_file))
+      im_file = os.path.join(args.image_dir, imglist[num_images])
+      # im = cv2.imread(im_file)
+      im_in = np.array(imread(im_file))
+
       if len(im_in.shape) == 2:
         im_in = im_in[:,:,np.newaxis]
         im_in = np.concatenate((im_in,im_in,im_in), axis=2)
+
       # rgb -> bgr
       im = im_in[:,:,::-1]
 
       blobs, im_scales = _get_image_blob(im)
       assert len(im_scales) == 1, "Only single-image batch implemented"
+
       im_blob = blobs
       im_info_np = np.array([[im_blob.shape[1], im_blob.shape[2], im_scales[0]]], dtype=np.float32)
 
@@ -359,28 +359,40 @@ if __name__ == '__main__':
             if vis:
               im2show = vis_detections(im2show, pascal_classes[j], cls_dets.cpu().numpy(), 0.5)
 
+            all_boxes[j][i] = cls_dets.cpu().numpy()
+
+          # If not detection
+          else:
+            all_boxes[j][i] = empty_array
+
+      # Limit to max_per_image detections *over all classes*
+      if max_per_image > 0:
+          image_scores = np.hstack([all_boxes[j][i][:, -1]
+                                    for j in xrange(1, imdb.num_classes)])
+          if len(image_scores) > max_per_image:
+              image_thresh = np.sort(image_scores)[-max_per_image]
+              for j in xrange(1, imdb.num_classes):
+                  keep = np.where(all_boxes[j][i][:, -1] >= image_thresh)[0]
+                  all_boxes[j][i] = all_boxes[j][i][keep, :]
+
       misc_toc = time.time()
       nms_time = misc_toc - misc_tic
 
-      if webcam_num == -1:
-          sys.stdout.write('im_detect: {:d}/{:d} {:.3f}s {:.3f}s   \r' \
-                           .format(num_images + 1, len(imglist), detect_time, nms_time))
-          sys.stdout.flush()
+      det_file = os.path.join(args.image_dir, "detections.pkl")
+      with open(det_file, 'wb') as f:
+        pickle.dump(all_boxes, f, pickle.HIGHEST_PROTOCOL)
 
-      if vis and webcam_num == -1:
-          # cv2.imshow('test', im2show)
-          # cv2.waitKey(0)
-          result_path = os.path.join(args.image_dir, imglist[num_images][:-4] + "_det.jpg")
-          cv2.imwrite(result_path, im2show)
-      else:
-          im2showRGB = cv2.cvtColor(im2show, cv2.COLOR_BGR2RGB)
-          cv2.imshow("frame", im2showRGB)
-          total_toc = time.time()
-          total_time = total_toc - total_tic
-          frame_rate = 1 / total_time
-          print('Frame rate:', frame_rate)
-          if cv2.waitKey(1) & 0xFF == ord('q'):
-              break
-  if webcam_num >= 0:
-      cap.release()
-      cv2.destroyAllWindows()
+      # if vis and webcam_num == -1:
+      #     # cv2.imshow('test', im2show)
+      #     # cv2.waitKey(0)
+      #     result_path = os.path.join(args.image_dir, imglist[num_images][:-4] + "_det.jpg")
+      #     cv2.imwrite(result_path, im2show)
+      # else:
+      #     im2showRGB = cv2.cvtColor(im2show, cv2.COLOR_BGR2RGB)
+      #     cv2.imshow("frame", im2showRGB)
+      #     total_toc = time.time()
+      #     total_time = total_toc - total_tic
+      #     frame_rate = 1 / total_time
+      #     print('Frame rate:', frame_rate)
+      #     if cv2.waitKey(1) & 0xFF == ord('q'):
+      #         break

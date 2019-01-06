@@ -37,3 +37,13 @@ test: info_test
 		--checkepoch ${EPOCH} \
 		--checkpoint ${CHECKPOINT} \
 		--cuda
+
+demo:
+	echo "Demo"
+	time python custom_demo.py \
+		--dataset ${DATASET} \
+		--net vgg16 \
+		--checkepoch ${EPOCH} \
+		--checkpoint ${CHECKPOINT} \
+		--cuda \
+		--image_dir /coc/scratch/msakhi3/dataset_sumo/JPEGImages/
