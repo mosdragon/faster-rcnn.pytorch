@@ -1,4 +1,4 @@
-export DATASET="sumo"
+export DATASET="pascal_voc"
 
 all: prep
 
@@ -26,7 +26,7 @@ train:
 		--net vgg16 \
 		--bs ${BATCH_SIZE} --nw ${NW} \
 		--lr ${LR} --lr_decay_step ${LR_DECAY} \
-		--cuda --mGPUs
+		--cuda
 
 
 test: info_test
@@ -35,5 +35,5 @@ test: info_test
 		--dataset ${DATASET} \
 		--net vgg16 \
 		--checkepoch ${EPOCH} \
-		--checkpoint 68973 \
+		--checkpoint ${CHECKPOINT} \
 		--cuda
