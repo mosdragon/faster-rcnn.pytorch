@@ -255,9 +255,11 @@ if __name__ == '__main__':
 
   print('Loaded Photo: {} images.'.format(num_images))
 
+  num_classes = len(sumo_full)
+
   # Store detections using this
   all_boxes = [[[] for _ in xrange(num_images)]
-               for _ in xrange(imdb.num_classes)]
+               for _ in xrange(num_classes)]
 
   empty_array = np.transpose(np.array([[],[],[],[],[]]), (1,0))
 
@@ -376,7 +378,7 @@ if __name__ == '__main__':
                                     for j in xrange(1, imdb.num_classes)])
           if len(image_scores) > max_per_image:
               image_thresh = np.sort(image_scores)[-max_per_image]
-              for j in xrange(1, imdb.num_classes):
+              for j in xrange(1, num_classes):
                   keep = np.where(all_boxes[j][i][:, -1] >= image_thresh)[0]
                   all_boxes[j][i] = all_boxes[j][i][keep, :]
 
