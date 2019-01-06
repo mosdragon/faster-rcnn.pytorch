@@ -215,6 +215,8 @@ if __name__ == '__main__':
   all_boxes = [[[] for _ in xrange(num_images)]
                for _ in xrange(imdb.num_classes)]
 
+  print("imdb.num_classes: ", imdb.num_classes)
+
   output_dir = get_output_dir(imdb, save_name)
 
   print("output_dir: ", output_dir)
