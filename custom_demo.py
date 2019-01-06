@@ -35,6 +35,7 @@ from model.utils.blob import im_list_to_blob
 from model.faster_rcnn.vgg16 import vgg16
 from model.faster_rcnn.resnet import resnet
 import pdb
+import pickle
 
 
 # CUSTOM SUMO CODE
