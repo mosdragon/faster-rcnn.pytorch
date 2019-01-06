@@ -46,4 +46,5 @@ demo:
 		--checkepoch ${EPOCH} \
 		--checkpoint ${CHECKPOINT} \
 		--cuda \
-		--image_dir /coc/scratch/msakhi3/dataset_sumo/JPEGImages/
+		--image_dir images \
+		--load_dir models/
