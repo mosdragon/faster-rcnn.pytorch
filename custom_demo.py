@@ -40,6 +40,7 @@ import pickle
 
 # CUSTOM SUMO CODE
 from datasets.sumo import sumo_small, sumo_full
+from collections import defaultdict
 
 try:
     xrange          # Python 2
@@ -264,16 +265,19 @@ if __name__ == '__main__':
 
   empty_array = np.transpose(np.array([[],[],[],[],[]]), (1,0))
 
-  # Counter variable
-  i = -1
-  while (num_images >= 0):
+  # We'll keep these for later
+  top_detections = {}
+
+
+  for i in xrange(num_images):
       total_tic = time.time()
 
-      num_images -= 1
-      i += 1  # Increment counter
+      # Create a defaultdict with this name
+      instance_name = imglist[i]
+      top_detections[instance_name] = defaultdict(dict)
 
       # Load the demo image
-      im_file = os.path.join(args.image_dir, imglist[num_images])
+      im_file = os.path.join(args.image_dir, imglist[i])
       # im = cv2.imread(im_file)
       im_in = np.array(imread(im_file))
 
@@ -348,6 +352,8 @@ if __name__ == '__main__':
       misc_tic = time.time()
       if vis:
           im2show = np.copy(im)
+
+
       for j in xrange(1, len(pascal_classes)):
           inds = torch.nonzero(scores[:,j]>thresh).view(-1)
           # if there is det
@@ -364,8 +370,11 @@ if __name__ == '__main__':
             cls_dets = cls_dets[order]
             keep = nms(cls_dets, cfg.TEST.NMS, force_cpu=not cfg.USE_GPU_NMS)
             cls_dets = cls_dets[keep.view(-1).long()]
-            if vis:
-              im2show = vis_detections(im2show, pascal_classes[j], cls_dets.cpu().numpy(), 0.5)
+            # if vis:
+            #   im2show = vis_detections(im2show, pascal_classes[j], cls_dets.cpu().numpy(), 0.5)
+
+            label = pascal_classes[j]
+            top_detections[instance_name][label] = cls_dets.cpu().numpy()
 
             all_boxes[j][i] = cls_dets.cpu().numpy()
 
@@ -386,21 +395,10 @@ if __name__ == '__main__':
       misc_toc = time.time()
       nms_time = misc_toc - misc_tic
 
-      det_file = "detections.pkl"
+      det_file = "top_detections.pkl"
       with open(det_file, 'wb') as f:
-        pickle.dump(all_boxes, f, pickle.HIGHEST_PROTOCOL)
+        pickle.dump(top_detections, f, pickle.HIGHEST_PROTOCOL)
 
-      # if vis and webcam_num == -1:
-      #     # cv2.imshow('test', im2show)
-      #     # cv2.waitKey(0)
-      #     result_path = os.path.join(args.image_dir, imglist[num_images][:-4] + "_det.jpg")
-      #     cv2.imwrite(result_path, im2show)
-      # else:
-      #     im2showRGB = cv2.cvtColor(im2show, cv2.COLOR_BGR2RGB)
-      #     cv2.imshow("frame", im2showRGB)
-      #     total_toc = time.time()
-      #     total_time = total_toc - total_tic
-      #     frame_rate = 1 / total_time
-      #     print('Frame rate:', frame_rate)
-      #     if cv2.waitKey(1) & 0xFF == ord('q'):
-      #         break
+      print("\n\n\n")
+      print("DETECTIONS:")
+      print(top_detections)
