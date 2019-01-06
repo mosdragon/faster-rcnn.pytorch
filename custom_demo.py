@@ -399,6 +399,6 @@ if __name__ == '__main__':
       with open(det_file, 'wb') as f:
         pickle.dump(top_detections, f, pickle.HIGHEST_PROTOCOL)
 
-      print("\n\n\n")
-      print("DETECTIONS:")
-      print(top_detections)
+      # print("\n\n\n")
+      # print("DETECTIONS:")
+      # print(top_detections)
