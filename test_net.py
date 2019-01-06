@@ -331,8 +331,8 @@ if __name__ == '__main__':
       pickle.dump(all_boxes, f, pickle.HIGHEST_PROTOCOL)
       print("Wrote to det_file: ", det_file)
 
-  # print('Evaluating detections')
-  # imdb.evaluate_detections(all_boxes, output_dir)
+  print('Evaluating detections')
+  imdb.evaluate_detections(all_boxes, output_dir)
 
   end = time.time()
   print("test time: %0.4fs" % (end - start))
