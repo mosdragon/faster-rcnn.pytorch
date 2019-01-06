@@ -246,8 +246,8 @@ if __name__ == '__main__':
   fasterRCNN.eval()
 
   start = time.time()
-  max_per_image = 100
-  thresh = 0.05
+  max_per_image = 25
+  thresh = 0.07
   vis = True
 
   webcam_num = args.webcam_num
